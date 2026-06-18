@@ -2,6 +2,8 @@
 
 A modular Unity-based system for generating infinite, procedural 3D terrain using layered Perlin noise, dynamic chunking, and Level of Detail (LOD) optimization.
 
+![Infinite Terrain Preview](gitAsset/InfiniteTerrain.gif)
+
 ## Technical Architecture
 
 The project is structured into several specialized modules to handle different aspects of the generation pipeline:

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(MapDisplay))]
 public class MapGenerator : MonoBehaviour
 {
     public enum ViewMode { Noise, Colors, Mesh };
@@ -24,6 +25,8 @@ public class MapGenerator : MonoBehaviour
 
     public TerrainTypes[] region;
 
+    public GameObject meshObject;
+
     public void GenerateMap()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, scale, octaves, persistance, lacunarity, seed, Offset);
@@ -44,7 +47,8 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        MapDisplay mapDisplay = FindObjectOfType<MapDisplay>();
+        MapDisplay mapDisplay = GetComponent<MapDisplay>();
+        mapDisplay.meshObject = meshObject;
         if (viewMode == ViewMode.Colors) mapDisplay.DrawTexture(TextureGenerator.TexturefromColorMap(colorMap, mapChunkSize, mapChunkSize));
         else if (viewMode == ViewMode.Noise) mapDisplay.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
         else if (viewMode == ViewMode.Mesh)
@@ -55,6 +59,17 @@ public class MapGenerator : MonoBehaviour
 
     }
 
+    void Start()
+    {
+        GenerateMap();
+    }
+    void Update()
+    {
+        if (autoUpdate)
+        {
+            Offset.y += Time.deltaTime*2;
+        }
+    }
     void OnValidate()
     {
         if (octaves < 0) octaves = 0;
